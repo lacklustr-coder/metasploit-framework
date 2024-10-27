@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import requests
 
-new_com = requests.get("https://raw.githubusercontent.com/rezasp/joomscan/master/exploit/db/componentslist.txt").text
+new_com = requests.get("https://raw.githubusercontent.com/rezasp/joomscan/master/exploit/db/componentslist.txt", timeout=60).text
 with open('data/wordlists/joomla.txt', 'r') as j:
     old = j.read().splitlines()
 
