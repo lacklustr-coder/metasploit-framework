@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-import requests
 import re
+from security import safe_requests
 
 def replace_agent_string(lines, replace_marker, url, regex):
   VALID_CHARS = 'a-zA-Z0-9\\(\\);:\\.,/_ '
@@ -12,7 +12,7 @@ def replace_agent_string(lines, replace_marker, url, regex):
   else:
     raise RuntimeError(f"Couldn't find marker {replace_marker}")
 
-  response = requests.get(url)
+  response = safe_requests.get(url)
   if response.status_code != 200:
     raise RuntimeError(f"Can't retrieve {url}")
 
