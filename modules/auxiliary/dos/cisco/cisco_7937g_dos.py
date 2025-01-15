@@ -5,7 +5,7 @@
 from metasploit import module
 import logging
 import string
-import random
+import secrets
 
 # extra modules
 dependency1_missing = False
@@ -57,7 +57,7 @@ metadata = {
 
 # from modules/auxiliary/dos/http/slowloris.py
 def create_rand_cred(size, seq=string.ascii_uppercase + string.ascii_lowercase):
-    return ''.join(random.choice(seq) for _ in range(size))
+    return ''.join(secrets.choice(seq) for _ in range(size))
 
 def run(args):
     module.LogHandler.setup(msg_prefix='{} - '.format(args['rhost']))
@@ -81,8 +81,8 @@ def run(args):
     transport = paramiko.Transport(sock=sock, disabled_algorithms={"kex": ["diffie-hellman-group-exchange-sha1",
                                                                            "diffie-hellman-group14-sha1",
                                                                            "diffie-hellman-group1-sha1"]})
-    ssh_uname = create_rand_cred(random.randint(7, 10))
-    ssh_pass = create_rand_cred(random.randint(7, 10))
+    ssh_uname = create_rand_cred(secrets.SystemRandom().randint(7, 10))
+    ssh_pass = create_rand_cred(secrets.SystemRandom().randint(7, 10))
     try:
         transport.connect(username=ssh_uname, password=ssh_pass)
     except (paramiko.ssh_exception.SSHException, OSError, paramiko.SSHException):
