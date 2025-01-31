@@ -12,7 +12,7 @@ def replace_agent_string(lines, replace_marker, url, regex):
   else:
     raise RuntimeError(f"Couldn't find marker {replace_marker}")
 
-  response = requests.get(url)
+  response = requests.get(url, timeout=60)
   if response.status_code != 200:
     raise RuntimeError(f"Can't retrieve {url}")
 
