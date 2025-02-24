@@ -61,8 +61,8 @@ def xmit_offset(data, name, value, match_offset=0):
 
 def xmit(name, dump_ruby=True):
     bin = os.path.normpath(os.path.join('./bin/', '%s.bin' % name))
-    f = open(bin, 'rb')
-    data = bytearray(f.read())
+    with open(bin, 'rb') as f:
+        data = bytearray(f.read())
     print('# Name: %s\n# Length: %d bytes' % (name, len(data)))
     xmit_offset(data, 'Port', pack('>H', 4444))           # 4444
     xmit_offset(data, 'LEPort', pack('<H', 4444))         # 4444

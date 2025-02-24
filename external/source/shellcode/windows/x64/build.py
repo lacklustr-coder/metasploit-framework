@@ -63,8 +63,8 @@ def xmit_offset(data, name, value):
 
 def xmit(name, dump_ruby=True):
     bin = os.path.normpath(os.path.join('./bin/', '%s.bin' % name))
-    f = open(bin, 'rb')
-    data = f.read()
+    with open(bin, 'rb') as f:
+        data = f.read()
     print('# Name: %s\n# Length: %d bytes' % (name, len(data)))
     xmit_offset(data, 'Port', pack('>H', 4444))           # 4444
     xmit_offset(data, 'Host', pack('>L', 0x7F000001))     # 127.0.0.1
